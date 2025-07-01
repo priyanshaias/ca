@@ -1,249 +1,226 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useCallback } from 'react';
+import { NewsArticle } from '../types';
+import { useNews } from '../contexts/NewsContext';
+import { useViewMode } from '../contexts/ViewModeContext';
 import ArticleCard from '../components/ArticleCard/ArticleCard';
 import SearchBar from '../components/UI/SearchBar';
 import DateFilter from '../components/UI/DateFilter';
 import TopicFilter from '../components/UI/TopicFilter';
 import ImportanceFilter from '../components/UI/ImportanceFilter';
-import FilterManager, { FilterState } from '../components/UI/FilterManager';
-import { loadSampleArticles } from '../utils/sampleData';
+import FilterManager from '../components/UI/FilterManager';
+import ArticleDetailModal from '../components/UI/ArticleDetailModal';
 
 const AdvancedSearchPage: React.FC = () => {
-  const allArticles = loadSampleArticles();
-  
-  // Demo: Some articles have notes (for demonstration purposes)
-  const articlesWithNotes = ['1', '3', '7', '10', '15', '20', '25', '28'];
+  const { 
+    articles, 
+    filteredArticles, 
+    filterState, 
+    setFilterState, 
+    clearFilters 
+  } = useNews();
+  const { layoutMode } = useViewMode();
+  const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedArticleIndex, setSelectedArticleIndex] = useState<number | null>(null);
 
-  // Initial filter state
-  const initialFilterState: FilterState = useMemo(() => ({
-    searchQuery: '',
-    dateRange: {
-      start: null,
-      end: null
-    },
-    selectedTopics: [],
-    selectedSubTopics: [],
-    minImportance: 1,
-    maxImportance: 5
-  }), []);
+  // Use filtered articles for display
+  const displayArticles = filteredArticles.length > 0 ? filteredArticles : articles;
 
-  const [filterState, setFilterState] = useState<FilterState>(initialFilterState);
-
-  // Apply all filters to articles
-  const filteredArticles = useMemo(() => {
-    return allArticles.filter(article => {
-      // Search filter
-      if (filterState.searchQuery.trim()) {
-        const query = filterState.searchQuery.toLowerCase();
-        const searchableText = [
-          article.title,
-          article.content.detailed,
-          article.content.prelims,
-          article.content.mains,
-          article.content.oneLiner,
-          ...article.tags
-        ].join(' ').toLowerCase();
-        
-        if (!searchableText.includes(query)) {
-          return false;
-        }
-      }
-      
-      // Date filter
-      if (filterState.dateRange.start || filterState.dateRange.end) {
-        const articleDate = new Date(article.date);
-        if (filterState.dateRange.start && articleDate < filterState.dateRange.start) {
-          return false;
-        }
-        if (filterState.dateRange.end && articleDate > filterState.dateRange.end) {
-          return false;
-        }
-      }
-      
-      // Topic filter
-      if (filterState.selectedTopics.length > 0 || filterState.selectedSubTopics.length > 0) {
-        if (filterState.selectedTopics.length > 0 && !filterState.selectedTopics.includes(article.topic)) {
-          return false;
-        }
-        if (filterState.selectedSubTopics.length > 0 && !filterState.selectedSubTopics.includes(article.subTopic)) {
-          return false;
-        }
-      }
-      
-      // Importance filter
-      if (filterState.minImportance > 1 || filterState.maxImportance < 5) {
-        if (article.importance < filterState.minImportance || article.importance > filterState.maxImportance) {
-          return false;
-        }
-      }
-      
-      return true;
-    });
-  }, [allArticles, filterState]);
-
-  // Filter state update handlers
+  // Handler functions for filter components
   const handleSearchChange = useCallback((query: string) => {
-    setFilterState(prev => ({ ...prev, searchQuery: query }));
-  }, []);
+    setFilterState({
+      ...filterState,
+      searchQuery: query
+    });
+  }, [filterState, setFilterState]);
 
-  const handleDateRangeChange = useCallback((dateRange: { start: Date; end: Date; } | null) => {
-    setFilterState(prev => ({ 
-      ...prev, 
-      dateRange: { 
-        start: dateRange?.start || null, 
-        end: dateRange?.end || null 
-      } 
-    }));
-  }, []);
+  const handleDateRangeChange = useCallback((dateRange: { start: Date; end: Date } | null) => {
+    setFilterState({
+      ...filterState,
+      dateRange: dateRange ? { start: dateRange.start, end: dateRange.end } : { start: null, end: null }
+    });
+  }, [filterState, setFilterState]);
 
   const handleTopicChange = useCallback((topics: string[]) => {
-    setFilterState(prev => ({ ...prev, selectedTopics: topics }));
-  }, []);
+    setFilterState({
+      ...filterState,
+      selectedTopics: topics
+    });
+  }, [filterState, setFilterState]);
 
   const handleSubTopicChange = useCallback((subTopics: string[]) => {
-    setFilterState(prev => ({ ...prev, selectedSubTopics: subTopics }));
-  }, []);
+    setFilterState({
+      ...filterState,
+      selectedSubTopics: subTopics
+    });
+  }, [filterState, setFilterState]);
 
   const handleImportanceChange = useCallback((min: number, max: number) => {
-    setFilterState(prev => ({ 
-      ...prev, 
-      minImportance: min, 
-      maxImportance: max 
-    }));
-  }, []);
+    setFilterState({
+      ...filterState,
+      minImportance: min,
+      maxImportance: max
+    });
+  }, [filterState, setFilterState]);
 
-  const handleFilterChange = useCallback((newState: FilterState) => {
-    setFilterState(newState);
-  }, []);
+  const handleArticleClick = (article: NewsArticle) => {
+    setSelectedArticle(article);
+    setIsModalOpen(true);
+    const index = displayArticles.findIndex(a => a.id === article.id);
+    setSelectedArticleIndex(index);
+  };
 
-  const handleResetFilters = useCallback(() => {
-    setFilterState(initialFilterState);
-  }, [initialFilterState]);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedArticle(null);
+    setSelectedArticleIndex(null);
+  };
+
+  const handleNavigate = useCallback((direction: 'prev' | 'next') => {
+    if (selectedArticleIndex === null) return;
+
+    let newIndex: number;
+    if (direction === 'prev') {
+      newIndex = Math.max(0, selectedArticleIndex - 1);
+    } else {
+      newIndex = Math.min(displayArticles.length - 1, selectedArticleIndex + 1);
+    }
+
+    setSelectedArticleIndex(newIndex);
+    setSelectedArticle(displayArticles[newIndex]);
+  }, [selectedArticleIndex, displayArticles]);
+
+  const hasPrevious = selectedArticleIndex !== null && selectedArticleIndex > 0;
+  const hasNext = selectedArticleIndex !== null && selectedArticleIndex < displayArticles.length - 1;
+
+  // Get layout-specific container classes
+  const getContainerClasses = () => {
+    switch (layoutMode) {
+      case 'list':
+        return 'space-y-0 divide-y divide-gray-200 dark:divide-gray-700';
+      case 'table':
+        return 'space-y-0 divide-y divide-gray-200 dark:divide-gray-700';
+      default: // card
+        return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+    }
+  };
+
+  // Get layout-specific wrapper classes
+  const getWrapperClasses = () => {
+    switch (layoutMode) {
+      case 'list':
+        return 'bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden';
+      case 'table':
+        return 'bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden';
+      default: // card
+        return '';
+    }
+  };
 
   return (
-    <div className="max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Advanced Search
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Search and filter articles with multiple criteria
-            </p>
-          </div>
-          <Link
-            to="/"
-            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200"
-          >
-            ← Back to Home
-          </Link>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Advanced Search
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Use multiple filters to find exactly what you're looking for
+          </p>
         </div>
-      </div>
 
-      {/* Search Bar */}
-      <div className="mb-8">
-        <SearchBar
-          onSearch={handleSearchChange}
-          placeholder="Search articles by title, content, or tags..."
-          initialValue={filterState.searchQuery}
-        />
-      </div>
+        {/* Search and Filters */}
+        <div className="mb-8 space-y-6">
+          {/* Search Bar */}
+          <SearchBar onSearch={handleSearchChange} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Filters Sidebar */}
-        <div className="lg:col-span-1 space-y-6">
           {/* Filter Manager */}
-          <FilterManager
-            articles={allArticles}
+          <FilterManager 
+            articles={articles}
             filterState={filterState}
-            onFilterChange={handleFilterChange}
-            onResetFilters={handleResetFilters}
+            onFilterChange={setFilterState}
+            onResetFilters={clearFilters}
           />
 
-          {/* Date Filter */}
-          <DateFilter
-            onDateRangeChange={handleDateRangeChange}
-          />
-
-          {/* Topic Filter */}
-          <TopicFilter
-            selectedTopics={filterState.selectedTopics}
-            selectedSubTopics={filterState.selectedSubTopics}
-            onTopicChange={handleTopicChange}
-            onSubTopicChange={handleSubTopicChange}
-          />
-
-          {/* Importance Filter */}
-          <ImportanceFilter
-            minImportance={filterState.minImportance}
-            maxImportance={filterState.maxImportance}
-            onImportanceChange={handleImportanceChange}
-          />
+          {/* Individual Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <DateFilter onDateRangeChange={handleDateRangeChange} />
+            <TopicFilter 
+              selectedTopics={filterState.selectedTopics}
+              selectedSubTopics={filterState.selectedSubTopics}
+              onTopicChange={handleTopicChange}
+              onSubTopicChange={handleSubTopicChange}
+            />
+            <ImportanceFilter 
+              minImportance={filterState.minImportance}
+              maxImportance={filterState.maxImportance}
+              onImportanceChange={handleImportanceChange}
+            />
+          </div>
         </div>
 
         {/* Results */}
-        <div className="lg:col-span-3">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Search Results
-              </h2>
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} found
-                </span>
-                {filteredArticles.length > 0 && (
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Showing {Math.min(filteredArticles.length, 20)} of {filteredArticles.length}
-                  </span>
-                )}
-              </div>
-            </div>
-            
-            {filteredArticles.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {filteredArticles.slice(0, 20).map((article) => (
-                  <ArticleCard 
-                    key={article.id} 
-                    article={article} 
-                    hasNotes={articlesWithNotes.includes(article.id)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="mb-4">
-                  <svg className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400 text-lg mb-2">
-                  No articles match your search criteria
-                </p>
-                <p className="text-gray-500 dark:text-gray-500 text-sm mb-4">
-                  Try adjusting your filters or search terms
-                </p>
-                <button
-                  onClick={handleResetFilters}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Reset All Filters
-                </button>
-              </div>
-            )}
-
-            {/* Load More Button */}
-            {filteredArticles.length > 20 && (
-              <div className="mt-8 text-center">
-                <button className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                  Load More Articles
-                </button>
-              </div>
-            )}
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+              Search Results
+            </h2>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {displayArticles.length} article{displayArticles.length !== 1 ? 's' : ''} found
+            </span>
           </div>
         </div>
+
+        {/* Articles Grid/List/Table */}
+        <div className={getWrapperClasses()}>
+          <div className={getContainerClasses()}>
+            {displayArticles.map((article) => (
+              <ArticleCard
+                key={article.id}
+                article={article}
+                layout={layoutMode}
+                hasNotes={false}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Empty State */}
+        {displayArticles.length === 0 && (
+          <div className="text-center py-12">
+            <svg
+              className="mx-auto h-12 w-12 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No articles found</h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Try adjusting your search criteria or filters.
+            </p>
+          </div>
+        )}
+
+        {/* Article Detail Modal */}
+        {selectedArticle && (
+          <ArticleDetailModal
+            article={selectedArticle}
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onNavigate={handleNavigate}
+            hasPrev={hasPrevious}
+            hasNext={hasNext}
+          />
+        )}
       </div>
     </div>
   );

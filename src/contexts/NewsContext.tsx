@@ -1,12 +1,24 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useMemo } from 'react';
 import { NewsArticle, ArticleFilters, ArticleSearchParams } from '../types';
+import { loadSampleArticles } from '../utils/sampleData';
+
+interface FilterState {
+  searchQuery: string;
+  dateRange: { start: Date | null; end: Date | null };
+  selectedTopics: string[];
+  selectedSubTopics: string[];
+  minImportance: number;
+  maxImportance: number;
+}
 
 interface NewsContextType {
   articles: NewsArticle[];
   filteredArticles: NewsArticle[];
   filters: ArticleFilters;
+  filterState: FilterState;
   searchParams: ArticleSearchParams;
   setFilters: (filters: ArticleFilters) => void;
+  setFilterState: (filterState: FilterState) => void;
   setSearchParams: (params: ArticleSearchParams) => void;
   addArticle: (article: NewsArticle) => void;
   updateArticle: (id: string, updates: Partial<NewsArticle>) => void;
@@ -23,8 +35,16 @@ interface NewsProviderProps {
 }
 
 export const NewsProvider: React.FC<NewsProviderProps> = ({ children }) => {
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [articles, setArticles] = useState<NewsArticle[]>(loadSampleArticles());
   const [filters, setFiltersState] = useState<ArticleFilters>({});
+  const [filterState, setFilterStateState] = useState<FilterState>({
+    searchQuery: '',
+    dateRange: { start: null, end: null },
+    selectedTopics: [],
+    selectedSubTopics: [],
+    minImportance: 1,
+    maxImportance: 5
+  });
   const [searchParams, setSearchParamsState] = useState<ArticleSearchParams>({
     query: '',
     sortBy: 'date',
@@ -32,71 +52,57 @@ export const NewsProvider: React.FC<NewsProviderProps> = ({ children }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  // Filter articles based on current filters and search params
-  const filteredArticles = React.useMemo(() => {
-    let filtered = [...articles];
-
-    // Apply search query
-    if (searchParams.query) {
-      const query = searchParams.query.toLowerCase();
-      filtered = filtered.filter(article =>
-        article.title.toLowerCase().includes(query) ||
-        article.content.oneLiner.toLowerCase().includes(query) ||
-        article.tags.some(tag => tag.toLowerCase().includes(query))
-      );
-    }
-
-    // Apply filters
-    if (filters.topic) {
-      filtered = filtered.filter(article => article.topic === filters.topic);
-    }
-
-    if (filters.subTopic) {
-      filtered = filtered.filter(article => article.subTopic === filters.subTopic);
-    }
-
-    if (filters.importance) {
-      filtered = filtered.filter(article => article.importance === filters.importance);
-    }
-
-    if (filters.tags && filters.tags.length > 0) {
-      filtered = filtered.filter(article =>
-        filters.tags!.some(tag => article.tags.includes(tag))
-      );
-    }
-
-    if (filters.dateRange) {
-      filtered = filtered.filter(article =>
-        article.date >= filters.dateRange!.start && article.date <= filters.dateRange!.end
-      );
-    }
-
-    // Apply sorting
-    filtered.sort((a, b) => {
-      let comparison = 0;
-      
-      switch (searchParams.sortBy) {
-        case 'date':
-          comparison = a.date.getTime() - b.date.getTime();
-          break;
-        case 'importance':
-          comparison = b.importance - a.importance;
-          break;
-        case 'title':
-          comparison = a.title.localeCompare(b.title);
-          break;
-        default:
-          comparison = a.date.getTime() - b.date.getTime();
+  // Filter articles based on current filter state
+  const filteredArticles = useMemo(() => {
+    return articles.filter(article => {
+      // Search filter
+      if (filterState.searchQuery) {
+        const searchLower = filterState.searchQuery.toLowerCase();
+        const matchesSearch = 
+          article.title.toLowerCase().includes(searchLower) ||
+          article.content.detailed.toLowerCase().includes(searchLower) ||
+          article.tags.some(tag => tag.toLowerCase().includes(searchLower));
+        if (!matchesSearch) return false;
       }
 
-      return searchParams.sortOrder === 'desc' ? -comparison : comparison;
+      // Date filter
+      if (filterState.dateRange.start || filterState.dateRange.end) {
+        const articleDate = new Date(article.date);
+        if (filterState.dateRange.start && articleDate < filterState.dateRange.start) {
+          return false;
+        }
+        if (filterState.dateRange.end && articleDate > filterState.dateRange.end) {
+          return false;
+        }
+      }
+      
+      // Topic filter
+      if (filterState.selectedTopics.length > 0 || filterState.selectedSubTopics.length > 0) {
+        if (filterState.selectedTopics.length > 0 && !filterState.selectedTopics.includes(article.topic)) {
+          return false;
+        }
+        if (filterState.selectedSubTopics.length > 0 && !filterState.selectedSubTopics.includes(article.subTopic)) {
+          return false;
+        }
+      }
+      
+      // Importance filter
+      if (filterState.minImportance > 1 || filterState.maxImportance < 5) {
+        if (article.importance < filterState.minImportance || article.importance > filterState.maxImportance) {
+          return false;
+        }
+      }
+      
+      return true;
     });
-
-    return filtered;
-  }, [articles, filters, searchParams]);
+  }, [articles, filterState]);
 
   const setFilters = useCallback((newFilters: ArticleFilters) => {
     setFiltersState(newFilters);
+  }, []);
+
+  const setFilterState = useCallback((newFilterState: FilterState) => {
+    setFilterStateState(newFilterState);
   }, []);
 
   const setSearchParams = useCallback((newParams: ArticleSearchParams) => {
@@ -119,6 +125,14 @@ export const NewsProvider: React.FC<NewsProviderProps> = ({ children }) => {
 
   const clearFilters = useCallback(() => {
     setFiltersState({});
+    setFilterStateState({
+      searchQuery: '',
+      dateRange: { start: null, end: null },
+      selectedTopics: [],
+      selectedSubTopics: [],
+      minImportance: 1,
+      maxImportance: 5
+    });
     setSearchParamsState({
       query: '',
       sortBy: 'date',
@@ -130,8 +144,10 @@ export const NewsProvider: React.FC<NewsProviderProps> = ({ children }) => {
     articles,
     filteredArticles,
     filters,
+    filterState,
     searchParams,
     setFilters,
+    setFilterState,
     setSearchParams,
     addArticle,
     updateArticle,

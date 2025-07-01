@@ -108,7 +108,7 @@ const ModalDemoPage: React.FC = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onNavigate={handleNavigate}
-          hasPrevious={hasPrevious}
+          hasPrev={hasPrevious}
           hasNext={hasNext}
         />
       )}

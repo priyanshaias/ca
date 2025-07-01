@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ArticleView, { ViewMode } from '../components/UI/ArticleView';
+import ArticleView from '../components/UI/ArticleView';
+import { ViewMode } from '../contexts/ViewModeContext';
 import { loadSampleArticles } from '../utils/sampleData';
 
 const ArticleViewDemoPage: React.FC = () => {
@@ -128,11 +129,7 @@ const ArticleViewDemoPage: React.FC = () => {
 
         {/* Article View */}
         <div className="lg:col-span-3">
-          <ArticleView
-            article={selectedArticle}
-            initialMode={currentViewMode}
-            onModeChange={handleModeChange}
-          />
+          <ArticleView article={selectedArticle} />
         </div>
       </div>
 

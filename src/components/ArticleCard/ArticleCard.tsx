@@ -2,18 +2,38 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { NewsArticle } from '../../types';
+import { useViewMode, LayoutMode } from '../../contexts/ViewModeContext';
 
 interface ArticleCardProps {
   article: NewsArticle;
   hasNotes?: boolean;
+  layout?: LayoutMode;
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false, layout = 'card' }) => {
+  const { viewMode } = useViewMode();
+
   // Calculate read time (average reading speed: 200 words per minute)
   const calculateReadTime = (text: string): number => {
     const words = text.split(' ').length;
     const readTime = Math.ceil(words / 200);
     return Math.max(1, readTime); // Minimum 1 minute
+  };
+
+  // Get content based on view mode
+  const getContentForViewMode = () => {
+    switch (viewMode) {
+      case 'detailed':
+        return article.content.detailed;
+      case 'prelims':
+        return article.content.prelims;
+      case 'mains':
+        return article.content.mains;
+      case 'one-liner':
+        return article.content.oneLiner;
+      default:
+        return article.content.detailed;
+    }
   };
 
   // Get topic badge color
@@ -76,8 +96,106 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false }) 
     return text.substring(0, maxLength) + '...';
   };
 
-  const readTime = calculateReadTime(article.content.detailed);
+  const currentContent = getContentForViewMode();
+  const readTime = calculateReadTime(currentContent);
 
+  // List View Layout
+  if (layout === 'list') {
+    return (
+      <Link to={`/article/${article.id}`}>
+        <div className="group bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+          <div className="p-4">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getTopicColor(article.topic)}`}>
+                    {article.topic}
+                  </span>
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getSubTopicColor(article.topic)}`}>
+                    {article.subTopic}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {format(article.date, 'MMM dd, yyyy')}
+                  </span>
+                </div>
+                
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-1">
+                  {truncateTitle(article.title, 120)}
+                </h3>
+                
+                <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed">
+                  {truncatePreview(currentContent, 150)}
+                </p>
+              </div>
+              
+              <div className="flex flex-col items-end space-y-2 ml-4">
+                <StarRating rating={article.importance} />
+                <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                  <span>{readTime} min</span>
+                  {hasNotes && (
+                    <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  // Table View Layout
+  if (layout === 'table') {
+    return (
+      <Link to={`/article/${article.id}`}>
+        <div className="group bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+          <div className="p-3">
+            <div className="grid grid-cols-12 gap-4 items-center">
+              <div className="col-span-4">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-1">
+                  {truncateTitle(article.title, 60)}
+                </h3>
+              </div>
+              
+              <div className="col-span-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getTopicColor(article.topic)}`}>
+                  {article.topic}
+                </span>
+              </div>
+              
+              <div className="col-span-2">
+                <span className="text-xs text-gray-600 dark:text-gray-400">
+                  {format(article.date, 'MMM dd')}
+                </span>
+              </div>
+              
+              <div className="col-span-2">
+                <StarRating rating={article.importance} />
+              </div>
+              
+              <div className="col-span-1">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {readTime}m
+                </span>
+              </div>
+              
+              <div className="col-span-1 flex justify-end">
+                {hasNotes && (
+                  <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  // Default Card View Layout
   return (
     <Link to={`/article/${article.id}`}>
       <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform hover:-translate-y-1">
@@ -121,9 +239,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false }) 
             {truncateTitle(article.title)}
           </h3>
 
-          {/* Preview Text */}
+          {/* Preview Text - Show only content for current view mode */}
           <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3 leading-relaxed">
-            {truncatePreview(article.content.detailed)}
+            {truncatePreview(currentContent)}
           </p>
 
           {/* Footer with metadata */}
@@ -147,22 +265,24 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false }) 
             </span>
           </div>
 
-          {/* Tags */}
-          <div className="mt-4 flex flex-wrap gap-1">
-            {article.tags.slice(0, 3).map((tag) => (
-              <span
-                key={tag}
-                className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
-              >
-                #{tag}
-              </span>
-            ))}
-            {article.tags.length > 3 && (
-              <span className="px-2 py-1 text-gray-400 dark:text-gray-500 text-xs">
-                +{article.tags.length - 3} more
-              </span>
-            )}
-          </div>
+          {/* Tags - Only show in detailed mode */}
+          {viewMode === 'detailed' && (
+            <div className="mt-4 flex flex-wrap gap-1">
+              {article.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+                >
+                  #{tag}
+                </span>
+              ))}
+              {article.tags.length > 3 && (
+                <span className="px-2 py-1 text-gray-400 dark:text-gray-500 text-xs">
+                  +{article.tags.length - 3} more
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Hover indicator */}

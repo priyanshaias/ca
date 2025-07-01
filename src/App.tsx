@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { NewsProvider } from './contexts/NewsContext';
+import { ViewModeProvider } from './contexts/ViewModeContext';
 import Layout from './components/Layout/Layout';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import ErrorBoundary from './components/UI/ErrorBoundary';
@@ -49,25 +50,27 @@ const App: React.FC = () => {
     <ErrorBoundary fallback={ErrorFallback}>
       <ThemeProvider>
         <NewsProvider>
-          <Router>
-            <div className="App">
-              <Layout>
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    {/* Main routes */}
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/article/:id" element={<ArticleDetailPage />} />
-                    <Route path="/search" element={<SearchPage />} />
-                    <Route path="/topics" element={<TopicsPage />} />
-                    <Route path="/topics/:topic" element={<TopicsPage />} />
-                    
-                    {/* Catch all route - redirect to home */}
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                  </Routes>
-                </Suspense>
-              </Layout>
-            </div>
-          </Router>
+          <ViewModeProvider>
+            <Router>
+              <div className="App">
+                <Layout>
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      {/* Main routes */}
+                      <Route path="/" element={<HomePage />} />
+                      <Route path="/article/:id" element={<ArticleDetailPage />} />
+                      <Route path="/search" element={<SearchPage />} />
+                      <Route path="/topics" element={<TopicsPage />} />
+                      <Route path="/topics/:topic" element={<TopicsPage />} />
+                      
+                      {/* Catch all route - redirect to home */}
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </Suspense>
+                </Layout>
+              </div>
+            </Router>
+          </ViewModeProvider>
         </NewsProvider>
       </ThemeProvider>
     </ErrorBoundary>

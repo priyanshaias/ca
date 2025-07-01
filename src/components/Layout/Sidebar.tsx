@@ -17,21 +17,9 @@ interface FilterState {
 }
 
 const Sidebar: React.FC = () => {
-  const { filters, setFilters, clearFilters } = useNews();
+  const { filterState, setFilterState, clearFilters } = useNews();
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
-
-  // Initialize filter state
-  const initialFilterState: FilterState = useMemo(() => ({
-    searchQuery: '',
-    dateRange: { start: null, end: null },
-    selectedTopics: [],
-    selectedSubTopics: [],
-    minImportance: 1,
-    maxImportance: 5
-  }), []);
-
-  const [filterState, setFilterState] = useState<FilterState>(initialFilterState);
 
   // Get real data counts
   const allArticles = loadSampleArticles();
@@ -102,42 +90,42 @@ const Sidebar: React.FC = () => {
 
   // Filter state update handlers
   const handleSearchChange = useCallback((query: string) => {
-    setFilterState(prev => ({ ...prev, searchQuery: query }));
-  }, []);
+    setFilterState({ ...filterState, searchQuery: query });
+  }, [filterState, setFilterState]);
 
   const handleDateRangeChange = useCallback((dateRange: { start: Date; end: Date; } | null) => {
-    setFilterState(prev => ({ 
-      ...prev, 
+    setFilterState({ 
+      ...filterState, 
       dateRange: { 
         start: dateRange?.start || null, 
         end: dateRange?.end || null 
       } 
-    }));
-  }, []);
+    });
+  }, [filterState, setFilterState]);
 
   const handleTopicChange = useCallback((topics: string[]) => {
-    setFilterState(prev => ({ ...prev, selectedTopics: topics }));
-  }, []);
+    setFilterState({ ...filterState, selectedTopics: topics });
+  }, [filterState, setFilterState]);
 
   const handleSubTopicChange = useCallback((subTopics: string[]) => {
-    setFilterState(prev => ({ ...prev, selectedSubTopics: subTopics }));
-  }, []);
+    setFilterState({ ...filterState, selectedSubTopics: subTopics });
+  }, [filterState, setFilterState]);
 
   const handleImportanceChange = useCallback((min: number, max: number) => {
-    setFilterState(prev => ({ 
-      ...prev, 
+    setFilterState({ 
+      ...filterState, 
       minImportance: min, 
       maxImportance: max 
-    }));
-  }, []);
+    });
+  }, [filterState, setFilterState]);
 
   const handleFilterChange = useCallback((newState: FilterState) => {
     setFilterState(newState);
-  }, []);
+  }, [setFilterState]);
 
   const handleResetFilters = useCallback(() => {
-    setFilterState(initialFilterState);
-  }, [initialFilterState]);
+    clearFilters();
+  }, [clearFilters]);
 
   // Calculate active filter count
   const activeFilterCount = useMemo(() => {
@@ -183,19 +171,19 @@ const Sidebar: React.FC = () => {
   });
 
   const handleTopicClick = (topicName: string) => {
-    setFilters({ ...filters, topic: topicName });
+    setFilterState({ ...filterState, selectedTopics: [topicName] });
   };
 
   const handleImportanceClick = (level: number) => {
-    setFilters({ ...filters, importance: level });
+    setFilterState({ ...filterState, minImportance: level, maxImportance: level });
   };
 
   const isTopicActive = (topicName: string) => {
-    return filters.topic === topicName;
+    return filterState.selectedTopics.includes(topicName);
   };
 
   const isImportanceActive = (level: number) => {
-    return filters.importance === level;
+    return filterState.minImportance === level && filterState.maxImportance === level;
   };
 
   return (
