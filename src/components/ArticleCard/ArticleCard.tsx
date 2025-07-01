@@ -8,9 +8,10 @@ interface ArticleCardProps {
   article: NewsArticle;
   hasNotes?: boolean;
   layout?: LayoutMode;
+  onClick?: (article: NewsArticle) => void;
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false, layout = 'card' }) => {
+const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false, layout = 'card', onClick }) => {
   const { viewMode } = useViewMode();
 
   // Calculate read time (average reading speed: 200 words per minute)
@@ -99,89 +100,46 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false, la
   const currentContent = getContentForViewMode();
   const readTime = calculateReadTime(currentContent);
 
+  // Handle click
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick(article);
+    }
+  };
+
   // List View Layout
   if (layout === 'list') {
-    return (
-      <Link to={`/article/${article.id}`}>
-        <div className="group bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
-          <div className="p-4">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getTopicColor(article.topic)}`}>
-                    {article.topic}
-                  </span>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getSubTopicColor(article.topic)}`}>
-                    {article.subTopic}
-                  </span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    {format(article.date, 'MMM dd, yyyy')}
-                  </span>
-                </div>
-                
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-1">
-                  {truncateTitle(article.title, 120)}
-                </h3>
-                
-                <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed">
-                  {truncatePreview(currentContent, 150)}
-                </p>
-              </div>
-              
-              <div className="flex flex-col items-end space-y-2 ml-4">
-                <StarRating rating={article.importance} />
-                <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
-                  <span>{readTime} min</span>
-                  {hasNotes && (
-                    <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Link>
-    );
-  }
-
-  // Table View Layout
-  if (layout === 'table') {
-    return (
-      <Link to={`/article/${article.id}`}>
-        <div className="group bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
-          <div className="p-3">
-            <div className="grid grid-cols-12 gap-4 items-center">
-              <div className="col-span-4">
-                <h3 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-1">
-                  {truncateTitle(article.title, 60)}
-                </h3>
-              </div>
-              
-              <div className="col-span-2">
+    const CardContent = () => (
+      <div className="group bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+        <div className="p-4">
+          <div className="flex items-start justify-between">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center space-x-2 mb-2">
                 <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getTopicColor(article.topic)}`}>
                   {article.topic}
                 </span>
-              </div>
-              
-              <div className="col-span-2">
-                <span className="text-xs text-gray-600 dark:text-gray-400">
-                  {format(article.date, 'MMM dd')}
+                <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getSubTopicColor(article.topic)}`}>
+                  {article.subTopic}
                 </span>
-              </div>
-              
-              <div className="col-span-2">
-                <StarRating rating={article.importance} />
-              </div>
-              
-              <div className="col-span-1">
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {readTime}m
+                  {format(article.date, 'MMM dd, yyyy')}
                 </span>
               </div>
               
-              <div className="col-span-1 flex justify-end">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-1">
+                {truncateTitle(article.title, 120)}
+              </h3>
+              
+              <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed">
+                {truncatePreview(currentContent, 150)}
+              </p>
+            </div>
+            
+            <div className="flex flex-col items-end space-y-2 ml-4">
+              <StarRating rating={article.importance} />
+              <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                <span>{readTime} min</span>
                 {hasNotes && (
                   <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -191,103 +149,190 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, hasNotes = false, la
             </div>
           </div>
         </div>
+      </div>
+    );
+
+    if (onClick) {
+      return (
+        <button onClick={handleClick} className="w-full text-left">
+          <CardContent />
+        </button>
+      );
+    }
+
+    return (
+      <Link to={`/article/${article.id}`}>
+        <CardContent />
+      </Link>
+    );
+  }
+
+  // Table View Layout
+  if (layout === 'table') {
+    const CardContent = () => (
+      <div className="group bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+        <div className="p-3">
+          <div className="grid grid-cols-12 gap-4 items-center">
+            <div className="col-span-4">
+              <h3 className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-1">
+                {truncateTitle(article.title, 60)}
+              </h3>
+            </div>
+            
+            <div className="col-span-2">
+              <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getTopicColor(article.topic)}`}>
+                {article.topic}
+              </span>
+            </div>
+            
+            <div className="col-span-2">
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                {format(article.date, 'MMM dd')}
+              </span>
+            </div>
+            
+            <div className="col-span-2">
+              <StarRating rating={article.importance} />
+            </div>
+            
+            <div className="col-span-1">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                {readTime}m
+              </span>
+            </div>
+            
+            <div className="col-span-1 flex justify-end">
+              {hasNotes && (
+                <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    if (onClick) {
+      return (
+        <button onClick={handleClick} className="w-full text-left">
+          <CardContent />
+        </button>
+      );
+    }
+
+    return (
+      <Link to={`/article/${article.id}`}>
+        <CardContent />
       </Link>
     );
   }
 
   // Default Card View Layout
-  return (
-    <Link to={`/article/${article.id}`}>
-      <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform hover:-translate-y-1">
-        <div className="p-6">
-          {/* Header with topic badges and importance */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex flex-wrap gap-2">
-              <span className={`px-3 py-1 text-xs font-medium rounded-full border ${getTopicColor(article.topic)}`}>
-                {article.topic}
-              </span>
-              <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getSubTopicColor(article.topic)}`}>
-                {article.subTopic}
-              </span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <StarRating rating={article.importance} />
-              {hasNotes && (
-                <div className="relative group/notes">
-                  <svg className="w-5 h-5 text-yellow-500 hover:text-yellow-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  
-                  {/* Tooltip */}
-                  <div className="absolute right-0 top-8 w-48 bg-gray-900 text-white text-xs rounded-lg py-2 px-3 opacity-0 group-hover/notes:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-                    <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                      <span>Has notes - Click to view</span>
-                    </div>
-                    <div className="absolute -top-1 right-2 w-2 h-2 bg-gray-900 transform rotate-45"></div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Article Title */}
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
-            {truncateTitle(article.title)}
-          </h3>
-
-          {/* Preview Text - Show only content for current view mode */}
-          <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3 leading-relaxed">
-            {truncatePreview(currentContent)}
-          </p>
-
-          {/* Footer with metadata */}
-          <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-            <div className="flex items-center space-x-4">
-              <span className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                {format(article.date, 'MMM dd, yyyy')}
-              </span>
-              <span className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                {readTime} min read
-              </span>
-            </div>
-            <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
-              {article.source}
+  const CardContent = () => (
+    <div className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 transform hover:-translate-y-1">
+      <div className="p-6">
+        {/* Header with topic badges and importance */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex flex-wrap gap-2">
+            <span className={`px-3 py-1 text-xs font-medium rounded-full border ${getTopicColor(article.topic)}`}>
+              {article.topic}
+            </span>
+            <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getSubTopicColor(article.topic)}`}>
+              {article.subTopic}
             </span>
           </div>
-
-          {/* Tags - Only show in detailed mode */}
-          {viewMode === 'detailed' && (
-            <div className="mt-4 flex flex-wrap gap-1">
-              {article.tags.slice(0, 3).map((tag) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
-                >
-                  #{tag}
-                </span>
-              ))}
-              {article.tags.length > 3 && (
-                <span className="px-2 py-1 text-gray-400 dark:text-gray-500 text-xs">
-                  +{article.tags.length - 3} more
-                </span>
-              )}
-            </div>
-          )}
+          <div className="flex items-center space-x-2">
+            <StarRating rating={article.importance} />
+            {hasNotes && (
+              <div className="relative group/notes">
+                <svg className="w-5 h-5 text-yellow-500 hover:text-yellow-600 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full"></div>
+                
+                {/* Tooltip */}
+                <div className="absolute right-0 top-8 w-48 bg-gray-900 text-white text-xs rounded-lg py-2 px-3 opacity-0 group-hover/notes:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span>Has notes - Click to view</span>
+                  </div>
+                  <div className="absolute -top-1 right-2 w-2 h-2 bg-gray-900 transform rotate-45"></div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Hover indicator */}
-        <div className="h-1 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+        {/* Article Title */}
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
+          {truncateTitle(article.title)}
+        </h3>
+
+        {/* Preview Text - Show only content for current view mode */}
+        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3 leading-relaxed">
+          {truncatePreview(currentContent)}
+        </p>
+
+        {/* Footer with metadata */}
+        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center space-x-4">
+            <span className="flex items-center">
+              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              {format(article.date, 'MMM dd, yyyy')}
+            </span>
+            <span className="flex items-center">
+              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {readTime} min read
+            </span>
+          </div>
+          <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
+            {article.source}
+          </span>
+        </div>
+
+        {/* Tags - Only show in detailed mode */}
+        {viewMode === 'detailed' && (
+          <div className="mt-4 flex flex-wrap gap-1">
+            {article.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+              >
+                #{tag}
+              </span>
+            ))}
+            {article.tags.length > 3 && (
+              <span className="px-2 py-1 text-gray-400 dark:text-gray-500 text-xs">
+                +{article.tags.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
       </div>
+
+      {/* Hover indicator */}
+      <div className="h-1 bg-gradient-to-r from-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+    </div>
+  );
+
+  if (onClick) {
+    return (
+      <button onClick={handleClick} className="w-full text-left">
+        <CardContent />
+      </button>
+    );
+  }
+
+  return (
+    <Link to={`/article/${article.id}`}>
+      <CardContent />
     </Link>
   );
 };

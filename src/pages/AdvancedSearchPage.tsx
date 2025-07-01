@@ -181,6 +181,7 @@ const AdvancedSearchPage: React.FC = () => {
                 article={article}
                 layout={layoutMode}
                 hasNotes={false}
+                onClick={handleArticleClick}
               />
             ))}
           </div>

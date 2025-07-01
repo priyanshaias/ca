@@ -91,6 +91,7 @@ const HomePage: React.FC = () => {
                 article={article}
                 layout={layoutMode}
                 hasNotes={false} // You can implement notes checking logic here
+                onClick={handleArticleClick}
               />
             ))}
           </div>
