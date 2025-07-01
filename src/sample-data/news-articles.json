@@ -1,0 +1,482 @@
+[
+  {
+    "id": "1",
+    "title": "RBI Hikes Repo Rate Amidst Inflation Concerns",
+    "date": "2024-06-25",
+    "topic": "Economy",
+    "subTopic": "Monetary Policy",
+    "importance": 5,
+    "content": {
+      "detailed": "The Reserve Bank of India increased the repo rate by 25 basis points to 6.75% to tackle rising inflation. The move is expected to impact loan EMIs and borrowing costs for businesses.",
+      "prelims": "RBI hikes repo rate by 25 bps to 6.75%.",
+      "mains": "Discuss the impact of RBI's repo rate hike on the Indian economy and inflation control.",
+      "oneLiner": "RBI raises repo rate to curb inflation."
+    },
+    "tags": ["RBI", "repo rate", "inflation", "monetary policy"],
+    "source": "The Hindu"
+  },
+  {
+    "id": "2",
+    "title": "ISRO Successfully Launches Gaganyaan Test Flight",
+    "date": "2024-06-20",
+    "topic": "Science & Tech",
+    "subTopic": "Space",
+    "importance": 5,
+    "content": {
+      "detailed": "ISRO's Gaganyaan test flight marks a major milestone in India's human spaceflight program. The mission tested crew module separation and re-entry systems.",
+      "prelims": "Gaganyaan test flight by ISRO successful.",
+      "mains": "Explain the significance of Gaganyaan for India's space ambitions.",
+      "oneLiner": "ISRO completes Gaganyaan test flight."
+    },
+    "tags": ["ISRO", "Gaganyaan", "space", "science"],
+    "source": "Times of India"
+  },
+  {
+    "id": "3",
+    "title": "India Signs Free Trade Agreement with UK",
+    "date": "2024-06-15",
+    "topic": "International",
+    "subTopic": "Trade",
+    "importance": 4,
+    "content": {
+      "detailed": "India and the UK have signed a comprehensive free trade agreement, aiming to boost bilateral trade by reducing tariffs and easing market access.",
+      "prelims": "India-UK FTA signed to boost trade.",
+      "mains": "Analyze the benefits and challenges of the India-UK FTA.",
+      "oneLiner": "India, UK sign free trade pact."
+    },
+    "tags": ["trade", "UK", "FTA", "international"],
+    "source": "Business Standard"
+  },
+  {
+    "id": "4",
+    "title": "Monsoon Arrives Early in Kerala, IMD Reports",
+    "date": "2024-06-10",
+    "topic": "Environment",
+    "subTopic": "Weather",
+    "importance": 3,
+    "content": {
+      "detailed": "The Indian Meteorological Department announced the early onset of monsoon in Kerala, bringing relief to farmers and water-stressed regions.",
+      "prelims": "Monsoon hits Kerala ahead of schedule.",
+      "mains": "Discuss the impact of early monsoon on agriculture and water resources.",
+      "oneLiner": "Early monsoon in Kerala: IMD."
+    },
+    "tags": ["monsoon", "IMD", "Kerala", "weather"],
+    "source": "NDTV"
+  },
+  {
+    "id": "5",
+    "title": "GST Council Reduces Tax on EV Batteries",
+    "date": "2024-06-05",
+    "topic": "Economy",
+    "subTopic": "Taxation",
+    "importance": 4,
+    "content": {
+      "detailed": "The GST Council has slashed the tax rate on electric vehicle batteries from 18% to 5% to promote green mobility and EV adoption in India.",
+      "prelims": "GST on EV batteries cut to 5%.",
+      "mains": "Evaluate the impact of GST reduction on EV sector growth.",
+      "oneLiner": "GST on EV batteries reduced."
+    },
+    "tags": ["GST", "EV", "tax", "economy"],
+    "source": "Economic Times"
+  },
+  {
+    "id": "6",
+    "title": "India Launches National Quantum Mission",
+    "date": "2024-05-30",
+    "topic": "Science & Tech",
+    "subTopic": "Innovation",
+    "importance": 5,
+    "content": {
+      "detailed": "The government has launched the National Quantum Mission to advance research in quantum computing, communication, and cryptography.",
+      "prelims": "National Quantum Mission launched.",
+      "mains": "Discuss the objectives and potential of India's National Quantum Mission.",
+      "oneLiner": "India starts National Quantum Mission."
+    },
+    "tags": ["quantum", "science", "innovation", "technology"],
+    "source": "PIB"
+  },
+  {
+    "id": "7",
+    "title": "Supreme Court Upholds Reservation for EWS",
+    "date": "2024-05-25",
+    "topic": "National",
+    "subTopic": "Judiciary",
+    "importance": 5,
+    "content": {
+      "detailed": "The Supreme Court has upheld the 10% reservation for Economically Weaker Sections (EWS) in education and government jobs.",
+      "prelims": "SC upholds 10% EWS quota.",
+      "mains": "Critically examine the implications of EWS reservation.",
+      "oneLiner": "SC upholds EWS reservation."
+    },
+    "tags": ["EWS", "reservation", "Supreme Court", "judiciary"],
+    "source": "The Hindu"
+  },
+  {
+    "id": "8",
+    "title": "India's GDP Grows at 7.2% in Q1",
+    "date": "2024-05-20",
+    "topic": "Economy",
+    "subTopic": "Growth",
+    "importance": 4,
+    "content": {
+      "detailed": "India's GDP growth rate for the first quarter of 2024 stood at 7.2%, driven by strong performance in manufacturing and services.",
+      "prelims": "GDP growth at 7.2% in Q1 2024.",
+      "mains": "Analyze the factors contributing to India's robust GDP growth.",
+      "oneLiner": "India's Q1 GDP grows 7.2%."
+    },
+    "tags": ["GDP", "growth", "economy", "Q1"],
+    "source": "Mint"
+  },
+  {
+    "id": "9",
+    "title": "India Hosts G20 Environment Ministers' Meeting",
+    "date": "2024-05-15",
+    "topic": "Environment",
+    "subTopic": "International Cooperation",
+    "importance": 4,
+    "content": {
+      "detailed": "India hosted the G20 Environment Ministers' meeting, focusing on climate change, biodiversity, and sustainable development.",
+      "prelims": "G20 Environment Ministers meet in India.",
+      "mains": "Discuss India's role in global environmental governance.",
+      "oneLiner": "India hosts G20 environment meet."
+    },
+    "tags": ["G20", "environment", "climate", "biodiversity"],
+    "source": "PIB"
+  },
+  {
+    "id": "10",
+    "title": "India's Chandrayaan-3 Discovers Water Molecules on Moon",
+    "date": "2024-05-10",
+    "topic": "Science & Tech",
+    "subTopic": "Space",
+    "importance": 5,
+    "content": {
+      "detailed": "Chandrayaan-3's rover has detected water molecules in the lunar soil, a breakthrough for future lunar missions and research.",
+      "prelims": "Chandrayaan-3 finds water on Moon.",
+      "mains": "Explain the significance of Chandrayaan-3's discovery for lunar exploration.",
+      "oneLiner": "Chandrayaan-3 detects water on Moon."
+    },
+    "tags": ["Chandrayaan-3", "ISRO", "moon", "space"],
+    "source": "ISRO"
+  },
+  {
+    "id": "11",
+    "title": "India, Japan Sign Defence Technology Pact",
+    "date": "2024-05-05",
+    "topic": "International",
+    "subTopic": "Defence",
+    "importance": 3,
+    "content": {
+      "detailed": "India and Japan have signed a defence technology cooperation agreement to jointly develop advanced military systems.",
+      "prelims": "India-Japan defence tech pact signed.",
+      "mains": "Assess the impact of India-Japan defence cooperation.",
+      "oneLiner": "India, Japan sign defence pact."
+    },
+    "tags": ["Japan", "defence", "technology", "international"],
+    "source": "The Hindu"
+  },
+  {
+    "id": "12",
+    "title": "Delhi Implements Odd-Even Scheme to Combat Pollution",
+    "date": "2024-05-01",
+    "topic": "Environment",
+    "subTopic": "Air Quality",
+    "importance": 4,
+    "content": {
+      "detailed": "Delhi government has reintroduced the odd-even vehicle scheme to reduce air pollution levels during peak smog season.",
+      "prelims": "Odd-even scheme returns in Delhi.",
+      "mains": "Evaluate the effectiveness of the odd-even scheme in controlling air pollution.",
+      "oneLiner": "Delhi brings back odd-even rule."
+    },
+    "tags": ["Delhi", "pollution", "air quality", "odd-even"],
+    "source": "Indian Express"
+  },
+  {
+    "id": "13",
+    "title": "India's First Hydrogen Train Flagged Off",
+    "date": "2024-04-28",
+    "topic": "Science & Tech",
+    "subTopic": "Transport",
+    "importance": 4,
+    "content": {
+      "detailed": "Indian Railways has launched its first hydrogen-powered train, marking a step towards green and sustainable transport.",
+      "prelims": "First hydrogen train launched in India.",
+      "mains": "Discuss the benefits of hydrogen trains for India's transport sector.",
+      "oneLiner": "India launches hydrogen train."
+    },
+    "tags": ["hydrogen", "train", "railways", "transport"],
+    "source": "PIB"
+  },
+  {
+    "id": "14",
+    "title": "Supreme Court Directs States to Implement Forest Rights Act",
+    "date": "2024-04-25",
+    "topic": "National",
+    "subTopic": "Governance",
+    "importance": 3,
+    "content": {
+      "detailed": "The Supreme Court has directed all states to ensure proper implementation of the Forest Rights Act, safeguarding tribal rights.",
+      "prelims": "SC orders states on Forest Rights Act.",
+      "mains": "Examine the challenges in implementing the Forest Rights Act.",
+      "oneLiner": "SC directs states on tribal rights."
+    },
+    "tags": ["Supreme Court", "tribal", "forest rights", "governance"],
+    "source": "The Hindu"
+  },
+  {
+    "id": "15",
+    "title": "India's Forex Reserves Hit All-Time High",
+    "date": "2024-04-20",
+    "topic": "Economy",
+    "subTopic": "External Sector",
+    "importance": 2,
+    "content": {
+      "detailed": "India's foreign exchange reserves have reached a record $650 billion, strengthening the country's external position.",
+      "prelims": "Forex reserves at record $650 bn.",
+      "mains": "Discuss the significance of rising forex reserves for India.",
+      "oneLiner": "India's forex reserves at all-time high."
+    },
+    "tags": ["forex", "reserves", "economy", "external sector"],
+    "source": "Mint"
+  },
+  {
+    "id": "16",
+    "title": "India Launches National Clean Air Programme 2.0",
+    "date": "2024-04-15",
+    "topic": "Environment",
+    "subTopic": "Policy",
+    "importance": 3,
+    "content": {
+      "detailed": "The government has unveiled NCAP 2.0, aiming to reduce particulate pollution by 40% in 100 cities by 2026.",
+      "prelims": "NCAP 2.0 launched for clean air.",
+      "mains": "Analyze the objectives and challenges of NCAP 2.0.",
+      "oneLiner": "NCAP 2.0 targets cleaner air."
+    },
+    "tags": ["NCAP", "clean air", "pollution", "policy"],
+    "source": "PIB"
+  },
+  {
+    "id": "17",
+    "title": "India, Australia Ink Critical Minerals Partnership",
+    "date": "2024-04-10",
+    "topic": "International",
+    "subTopic": "Resources",
+    "importance": 3,
+    "content": {
+      "detailed": "India and Australia have signed a partnership to secure supply chains for critical minerals essential for clean energy technologies.",
+      "prelims": "India-Australia critical minerals deal.",
+      "mains": "Discuss the importance of critical minerals for India's energy transition.",
+      "oneLiner": "India, Australia sign minerals pact."
+    },
+    "tags": ["Australia", "minerals", "energy", "international"],
+    "source": "Business Standard"
+  },
+  {
+    "id": "18",
+    "title": "National Education Policy 2020: Implementation Update",
+    "date": "2024-04-05",
+    "topic": "National",
+    "subTopic": "Education",
+    "importance": 4,
+    "content": {
+      "detailed": "The Ministry of Education released an update on NEP 2020 implementation, highlighting progress in curriculum reforms and teacher training.",
+      "prelims": "NEP 2020 implementation update.",
+      "mains": "Evaluate the progress and challenges in NEP 2020 implementation.",
+      "oneLiner": "NEP 2020: Govt shares progress."
+    },
+    "tags": ["NEP", "education", "policy", "national"],
+    "source": "PIB"
+  },
+  {
+    "id": "19",
+    "title": "India's First 5G Rural Network Launched in Haryana",
+    "date": "2024-03-30",
+    "topic": "Science & Tech",
+    "subTopic": "Telecom",
+    "importance": 3,
+    "content": {
+      "detailed": "India's first 5G rural network has been launched in Haryana, aiming to bridge the digital divide in rural areas.",
+      "prelims": "First rural 5G network in Haryana.",
+      "mains": "Discuss the impact of 5G on rural development in India.",
+      "oneLiner": "India launches rural 5G in Haryana."
+    },
+    "tags": ["5G", "rural", "telecom", "Haryana"],
+    "source": "Times of India"
+  },
+  {
+    "id": "20",
+    "title": "India, France Collaborate on Green Hydrogen",
+    "date": "2024-03-28",
+    "topic": "International",
+    "subTopic": "Energy",
+    "importance": 2,
+    "content": {
+      "detailed": "India and France have agreed to collaborate on green hydrogen research and production to accelerate clean energy transition.",
+      "prelims": "India-France green hydrogen deal.",
+      "mains": "Analyze the significance of India-France green hydrogen partnership.",
+      "oneLiner": "India, France to work on green hydrogen."
+    },
+    "tags": ["France", "hydrogen", "energy", "international"],
+    "source": "PIB"
+  },
+  {
+    "id": "21",
+    "title": "India's Tiger Population Rises to 3,500",
+    "date": "2024-03-25",
+    "topic": "Environment",
+    "subTopic": "Wildlife",
+    "importance": 3,
+    "content": {
+      "detailed": "The latest tiger census shows India's tiger population has increased to 3,500, reflecting successful conservation efforts.",
+      "prelims": "Tiger population rises to 3,500.",
+      "mains": "Discuss the factors behind India's tiger conservation success.",
+      "oneLiner": "India's tiger count at 3,500."
+    },
+    "tags": ["tiger", "wildlife", "conservation", "environment"],
+    "source": "PIB"
+  },
+  {
+    "id": "22",
+    "title": "India's First Solar City Inaugurated in Gujarat",
+    "date": "2024-03-20",
+    "topic": "Environment",
+    "subTopic": "Renewable Energy",
+    "importance": 2,
+    "content": {
+      "detailed": "Gujarat has inaugurated India's first fully solar-powered city, setting a benchmark for renewable energy adoption.",
+      "prelims": "First solar city launched in Gujarat.",
+      "mains": "Evaluate the impact of solar cities on India's energy goals.",
+      "oneLiner": "Gujarat launches India's first solar city."
+    },
+    "tags": ["solar", "Gujarat", "renewable", "energy"],
+    "source": "Economic Times"
+  },
+  {
+    "id": "23",
+    "title": "India's Unemployment Rate Drops to 6.8%",
+    "date": "2024-03-15",
+    "topic": "Economy",
+    "subTopic": "Employment",
+    "importance": 3,
+    "content": {
+      "detailed": "India's unemployment rate has declined to 6.8% in March, attributed to job creation in manufacturing and services.",
+      "prelims": "Unemployment rate falls to 6.8%.",
+      "mains": "Analyze the trends in India's employment scenario.",
+      "oneLiner": "India's unemployment rate at 6.8%."
+    },
+    "tags": ["unemployment", "jobs", "economy", "employment"],
+    "source": "Mint"
+  },
+  {
+    "id": "24",
+    "title": "India's First Indigenous Aircraft Carrier Commissioned",
+    "date": "2024-03-10",
+    "topic": "National",
+    "subTopic": "Defence",
+    "importance": 5,
+    "content": {
+      "detailed": "INS Vikrant, India's first indigenous aircraft carrier, has been commissioned, boosting the country's maritime capabilities.",
+      "prelims": "INS Vikrant commissioned.",
+      "mains": "Discuss the strategic importance of INS Vikrant for India.",
+      "oneLiner": "India commissions INS Vikrant."
+    },
+    "tags": ["INS Vikrant", "defence", "navy", "national"],
+    "source": "The Hindu"
+  },
+  {
+    "id": "25",
+    "title": "India's Startup Ecosystem Ranks 3rd Globally",
+    "date": "2024-03-05",
+    "topic": "Science & Tech",
+    "subTopic": "Entrepreneurship",
+    "importance": 2,
+    "content": {
+      "detailed": "India has emerged as the third-largest startup ecosystem in the world, with over 100 unicorns and robust funding.",
+      "prelims": "India ranks 3rd in global startups.",
+      "mains": "Examine the factors driving India's startup growth.",
+      "oneLiner": "India is world's 3rd largest startup hub."
+    },
+    "tags": ["startup", "entrepreneurship", "unicorn", "technology"],
+    "source": "YourStory"
+  },
+  {
+    "id": "26",
+    "title": "India, US Hold 2+2 Ministerial Dialogue",
+    "date": "2024-03-01",
+    "topic": "International",
+    "subTopic": "Diplomacy",
+    "importance": 3,
+    "content": {
+      "detailed": "India and the US held the annual 2+2 Ministerial Dialogue, discussing defence, trade, and regional security.",
+      "prelims": "India-US 2+2 dialogue held.",
+      "mains": "Analyze the outcomes of the India-US 2+2 Ministerial Dialogue.",
+      "oneLiner": "India, US hold 2+2 talks."
+    },
+    "tags": ["US", "diplomacy", "defence", "international"],
+    "source": "PIB"
+  },
+  {
+    "id": "27",
+    "title": "India's Wheat Exports Reach Record High",
+    "date": "2024-02-25",
+    "topic": "Economy",
+    "subTopic": "Trade",
+    "importance": 2,
+    "content": {
+      "detailed": "India's wheat exports have touched a record high of 10 million tonnes, driven by global demand and bumper harvest.",
+      "prelims": "Wheat exports hit record 10 mn tonnes.",
+      "mains": "Discuss the implications of rising wheat exports for Indian farmers.",
+      "oneLiner": "India's wheat exports at record high."
+    },
+    "tags": ["wheat", "exports", "trade", "economy"],
+    "source": "Business Standard"
+  },
+  {
+    "id": "28",
+    "title": "India's COVID-19 Vaccination Drive Crosses 2 Billion Doses",
+    "date": "2024-02-20",
+    "topic": "National",
+    "subTopic": "Health",
+    "importance": 4,
+    "content": {
+      "detailed": "India's COVID-19 vaccination drive has surpassed 2 billion doses, marking a major public health achievement.",
+      "prelims": "COVID-19 vaccination crosses 2 bn doses.",
+      "mains": "Evaluate India's COVID-19 vaccination strategy and its outcomes.",
+      "oneLiner": "India delivers 2 billion COVID vaccine doses."
+    },
+    "tags": ["COVID-19", "vaccination", "health", "national"],
+    "source": "PIB"
+  },
+  {
+    "id": "29",
+    "title": "India's Renewable Energy Capacity Crosses 180 GW",
+    "date": "2024-02-15",
+    "topic": "Environment",
+    "subTopic": "Energy",
+    "importance": 3,
+    "content": {
+      "detailed": "India's total renewable energy capacity has crossed 180 GW, with significant contributions from solar and wind power.",
+      "prelims": "Renewable energy capacity at 180 GW.",
+      "mains": "Discuss India's progress in renewable energy adoption.",
+      "oneLiner": "India's renewable energy at 180 GW."
+    },
+    "tags": ["renewable", "energy", "solar", "wind"],
+    "source": "Economic Times"
+  },
+  {
+    "id": "30",
+    "title": "India's Digital Rupee Pilot Expands to 10 More Cities",
+    "date": "2024-02-10",
+    "topic": "Economy",
+    "subTopic": "Digital Currency",
+    "importance": 1,
+    "content": {
+      "detailed": "The RBI has expanded the digital rupee pilot project to 10 more cities, aiming to test the feasibility of a central bank digital currency.",
+      "prelims": "Digital rupee pilot in 10 more cities.",
+      "mains": "Analyze the prospects and challenges of India's digital rupee.",
+      "oneLiner": "Digital rupee pilot expands."
+    },
+    "tags": ["digital rupee", "RBI", "currency", "economy"],
+    "source": "Mint"
+  }
+] 
